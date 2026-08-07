@@ -33,7 +33,7 @@ cp -r modules/* "$THISPATH/modules/" 2>/dev/null
 cp -r lib/* "$THISPATH/lib/" 2>/dev/null
 #cp -r templates/* "$THISPATH/templates/" 2>/dev/null
 touch "$THISPATH/lime.conf"
-echo "HOME="/lime" >> "$THISPATH/lime.conf"
+echo "HOME=/lime" >> "$THISPATH/lime.conf"
 echo "[+] Updating file permissions"
 chmod +x ./modules/*
 chmod +x limeyum
