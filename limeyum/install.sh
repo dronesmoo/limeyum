@@ -36,6 +36,7 @@ touch "$THISPATH/lime.conf"
 echo "home=/lime" >> "$THISPATH/lime.conf"
 echo "[+] Updating file permissions"
 chmod +x ./modules/*
+chmod +x ./lib/*
 chmod +x limeyum
 echo "[+] LIIMEYum file permissions updated"
 
