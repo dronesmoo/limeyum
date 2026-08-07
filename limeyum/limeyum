@@ -10,46 +10,59 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo "${GREEN}----------------------------------------------${NC}"
-echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
-echo "${GREEN}|${YELLOW}             LInux enuMEration              ${GREEN}|${NC}"
-echo "${GREEN}|${YELLOW}             Finding the YUM!               ${GREEN}|${NC}"
-echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
-echo "${GREEN}|${RED} *** ONLY FOR LEGAL, ETHICAL, AUTHORIZED    ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     USE. This author is not responsible    ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     for use of this software, Like a car   ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     manufacturer isn't responsible for     ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     your speeding ticket, this author      ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     isn't responsible for how you use      ${GREEN}|${NC}"
-echo "${GREEN}|${RED}     this.                                  ${GREEN}|${NC}"
-echo "${GREEN}|${RED}                                            ${GREEN}|${NC}"
-echo "${GREEN}----------------------------------------------${NC}"
+show_banner() {
+    echo "${GREEN}----------------------------------------------${NC}"
+    echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
+    echo "${GREEN}|${YELLOW}             LInux enuMEration              ${GREEN}|${NC}"
+    echo "${GREEN}|${YELLOW}             Finding the YUM!               ${GREEN}|${NC}"
+    echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
+    echo "${GREEN}|${RED} *** ONLY FOR LEGAL, ETHICAL, AUTHORIZED    ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     USE. This author is not responsible    ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     for use of this software, Like a car   ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     manufacturer isn't responsible for     ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     your speeding ticket, this author      ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     isn't responsible for how you use      ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}     this.                                  ${GREEN}|${NC}"
+    echo "${GREEN}|${RED}                                            ${GREEN}|${NC}"
+    echo "${GREEN}----------------------------------------------${NC}"
+}
 
-echo "1. Load Project"
-echo "2. Create Project"
-echo "3. Exit (just press Ctrl+C)"
-read -p "What would you like to do? " STARTINGOPTION
+show_menu() {
+    echo "1. Load Project"
+    echo "2. Create Project"
+    echo "3. Exit (just press Ctrl+C)"
+    read -p "What would you like to do? " STARTINGOPTION
+}
 
-# --- Load an existing project ---
-if [[ $STARTINGOPTION == 1 ]]; then
+load_project() {
     i=0
     while IFS= read -r line; do
         i=$((i + 1))
         echo "$i. $line"
-    done < <(ls ./projects)
-    read -p "Select project: " SELECTION
-    PROJNAME=$(ls ./projects | sed -n "${SELECTION}p")
-    echo "[+] Loading project: $PROJNAME"
-    cd "./projects/$PROJNAME" || { echo "${RED}Could not load project.${NC}"; exit 1; }
-    echo "Directory: $(pwd)"
-fi
+    done < <(ls "${SCRIPT_DIR}/projects/")
 
-# --- Create a new project ---
-if [[ $STARTINGOPTION == 2 ]]; then
+    if [[ $i -eq 0 ]]; then
+        echo "${RED}[-] No projects found.${NC}"
+        return
+    fi
+
+    read -p "Select project: " SELECTION
+    PROJNAME=$(ls "${SCRIPT_DIR}/projects/" | sed -n "${SELECTION}p")
+
+    if [[ -z "$PROJNAME" ]]; then
+        echo "${RED}[-] Invalid selection.${NC}"
+        return
+    fi
+
+    echo "[+] Loading project: $PROJNAME"
+    echo "${GREEN}[+] Project $PROJNAME loaded.${NC}"
+}
+
+create_project() {
     read -p "Project Name: " PROJNAME
-    mkdir -p "$home/projects/$PROJNAME"
-    cd "$home/projects/$PROJNAME" || { echo "${RED}Could not create project.${NC}"; exit 1; }
+    mkdir -p "${SCRIPT_DIR}/projects/$PROJNAME/targets"
     echo "${GREEN}[+] Project $PROJNAME created.${NC}"
+
     read -p "Initial Target IP: " TARGETIP
     read -p "Initial Target URL: " TARGETURL
     read -p "Add to /etc/hosts (y/n)? " ADDTOHOSTS
@@ -57,18 +70,19 @@ if [[ $STARTINGOPTION == 2 ]]; then
         echo "$TARGETIP $TARGETURL" | sudo tee -a /etc/hosts >/dev/null
         echo "[+] Added to /etc/hosts"
     fi
+
     read -p "Type: HTB, BugBounty, or PenTest : " TYPE
     read -p "Scope: " SCOPE
+
     read -p "Connect to Obsidian (y/n)? " OBSIDIAN
-    echo "[+] Creating project and target files"
     if [[ $OBSIDIAN == "y" ]]; then
         OBSIDIAN_VAULT="${HOME}/ObsidianVault/Pentests"
-        PROJECTS_DIR="$home/projects/$PROJNAME"
         mkdir -p "$OBSIDIAN_VAULT"
-        ln -s "${PROJECTS_DIR}/${PROJNAME}" "${OBSIDIAN_VAULT}/${PROJNAME}"
+        ln -s "${SCRIPT_DIR}/projects/${PROJNAME}" "${OBSIDIAN_VAULT}/${PROJNAME}"
         echo "${GREEN}[+] Connected to Obsidian${NC}"
     fi
-    cat > "$PROJNAME.conf" << EOF
+
+    cat > "${SCRIPT_DIR}/projects/$PROJNAME/$PROJNAME.conf" << EOF
 Projectname="${PROJNAME}"
 Type="${TYPE}"
 TargetIP="${TARGETIP}"
@@ -76,36 +90,51 @@ TargetURL="${TARGETURL}"
 Created="$(date '+%Y-%m-%d %H:%M')"
 Scope="${SCOPE}"
 EOF
-    touch "./methodology.md"
-    echo "${GREEN}[+] Created project files${NC}"
 
-    mkdir -p ./targets
+    touch "${SCRIPT_DIR}/projects/$PROJNAME/methodology.md"
+    echo "${GREEN}[+] Created project files${NC}"
 
     if [[ $TYPE == "BugBounty" ]]; then
         echo "[+] Additional information needed:"
         read -p "Bug Bounty Organization: " BBORG
         read -p "Custom HTML header: " BBHEADER
-        echo "[+] Finalizing project configuration file"
-        cat >> "$PROJNAME.conf" << EOF
+        cat >> "${SCRIPT_DIR}/projects/$PROJNAME/$PROJNAME.conf" << EOF
 BBOrg="$BBORG"
 BBHeader="$BBHEADER"
 EOF
     fi
-    echo "${GREEN}Project file created. Now creating first target${NC}"
-    "$home/lib/createtargetnode.sh" "${HOME}/${PROJNAME}"
-    echo "${GREEN}[+] Project and target files created. Now in project ${PROJNAME}.${NC}"
-fi
+
+    echo "${GREEN}[+] Project file created. Now creating first target...${NC}"
+    "${SCRIPT_DIR}/lib/createtargetnode.sh" "${SCRIPT_DIR}/projects/${PROJNAME}"
+    echo "${GREEN}[+] Project and target created. Now in project ${PROJNAME}.${NC}"
+}
+
+# --- Initial startup ---
+show_banner
+show_menu
+
+case "$STARTINGOPTION" in
+    1) load_project ;;
+    2) create_project ;;
+    3) exit 0 ;;
+esac
 
 # --- Main command loop ---
 TARGETNAME=""
-echo "${BLUE}Some helpful commands: exit, list targets, target n, make report, attack.${NC}"
-echo "${BLUE}Once a target is selected, you can choose to enumerate, attack, etc.${NC}"
+TARGET_DIR=""
+
+echo
+echo "${BLUE}Commands: home, list targets, target n, add target node, attack, make report, help, exit${NC}"
+echo
 
 while true; do
+    # Build prompt based on state
     if [[ -n "$TARGETNAME" ]]; then
         read -p "LIMEYUMM:$PROJNAME:$TARGETNAME> " COMMAND
-    else
+    elif [[ -n "$PROJNAME" ]]; then
         read -p "LIMEYUMM:$PROJNAME> " COMMAND
+    else
+        read -p "LIMEYUMM> " COMMAND
     fi
 
     case "$COMMAND" in
@@ -113,33 +142,85 @@ while true; do
             echo "${BLUE}Goodbye.${NC}"
             break
             ;;
-        "make report")
-            ./makereport "$PROJNAME"
+
+        home)
+            PROJNAME=""
+            TARGETNAME=""
+            TARGET_DIR=""
+            echo "${GREEN}[+] Returned to home.${NC}"
+            show_menu
+            case "$STARTINGOPTION" in
+                1) load_project ;;
+                2) create_project ;;
+                3) exit 0 ;;
+            esac
             ;;
+
         "list targets")
-            i=0
-            while IFS= read -r line; do
-                i=$((i + 1))
-                echo "$i. $line"
-            done < <(ls ./targets)
+            if [[ -z "$PROJNAME" ]]; then
+                echo "${RED}[-] No project loaded.${NC}"
+            else
+                i=0
+                while IFS= read -r line; do
+                    i=$((i + 1))
+                    echo "$i. $line"
+                done < <(ls "${SCRIPT_DIR}/projects/${PROJNAME}/targets/")
+                [[ $i -eq 0 ]] && echo "${RED}[-] No targets found.${NC}"
+            fi
             ;;
+
         target\ *)
             SELECTION="${COMMAND#target }"
-            TARGETNAME=$(ls ./targets | sed -n "${SELECTION}p")
+            TARGETNAME=$(ls "${SCRIPT_DIR}/projects/${PROJNAME}/targets/" \
+                | sed -n "${SELECTION}p")
             if [[ -z "$TARGETNAME" ]]; then
-                echo "${RED}No target at that number.${NC}"
+                echo "${RED}[-] No target at that number.${NC}"
             else
+                TARGET_DIR="${SCRIPT_DIR}/projects/${PROJNAME}/targets/${TARGETNAME}"
                 echo "[+] Target loaded: $TARGETNAME"
             fi
             ;;
+
         attack)
-            "$home/lime/modules/attack.sh" "./targets/$TARGETNAME"
+            if [[ -z "$TARGETNAME" ]]; then
+                echo "${RED}[-] Please select a target first (list targets, target n)${NC}"
+            else
+                "${SCRIPT_DIR}/modules/attack.sh" "$TARGET_DIR"
+            fi
             ;;
+
+        "make report")
+            if [[ -z "$PROJNAME" ]]; then
+                echo "${RED}[-] No project loaded.${NC}"
+            else
+                "${SCRIPT_DIR}/lib/makereport.sh" "${SCRIPT_DIR}/projects/${PROJNAME}"
+            fi
+            ;;
+
         "add target node")
-            "$home/lib/createtargetnode.sh" "${home}/${PROJNAME}"
+            if [[ -z "$PROJNAME" ]]; then
+                echo "${RED}[-] No project loaded.${NC}"
+            else
+                "${SCRIPT_DIR}/lib/createtargetnode.sh" \
+                    "${SCRIPT_DIR}/projects/${PROJNAME}"
+            fi
             ;;
+
+        help)
+            echo "${BLUE}Commands:${NC}"
+            echo "  home              — return to home, load/create project"
+            echo "  list targets      — list targets in current project"
+            echo "  target n          — select target by number"
+            echo "  add target node   — add a new target to current project"
+            echo "  attack            — run attack module on selected target"
+            echo "  make report       — generate report for current project"
+            echo "  help              — show this message"
+            echo "  exit              — exit LIMEYum"
+            ;;
+
         "")
             ;;
+
         *)
             echo "${RED}Unknown command: $COMMAND${NC}"
             ;;
