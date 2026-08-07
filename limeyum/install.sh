@@ -14,7 +14,7 @@ echo
 # Validate path exists before proceeding
 read -p "Install path: " THISPATH
 if [[ ! -d "$THISPATH" ]]; then
-    chmod -p "${THISPATH}
+    mkdir -p "${THISPATH}"
     echo "${GREEN}[+] Directory created at ${THISPATH}"
 fi
 
