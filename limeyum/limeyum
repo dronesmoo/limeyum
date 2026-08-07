@@ -58,7 +58,7 @@ if [[ $STARTINGOPTION == 2 ]]; then
         echo "[+] Added to /etc/hosts"
     fi
     read -p "Type: HTB, BugBounty, or PenTest : " TYPE
-    read -p "Scope: SCOPE
+    read -p "Scope: " SCOPE
     read -p "Connect to Obsidian (y/n)? " OBSIDIAN
     echo "[+] Creating project and target files"
     if [[ $OBSIDIAN == "y" ]]; then
