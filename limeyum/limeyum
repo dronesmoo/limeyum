@@ -1,0 +1,147 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+source "${SCRIPT_DIR}/lime.conf"
+
+shopt -s xpg_echo
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo "$GREEN----------------------------------------------${NC}"
+echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
+echo "${GREEN}|${YELLOW}             LInux enuMEration              ${GREEN}|${NC}"
+echo "${GREEN}|${YELLOW}             Finding the YUM!               ${GREEN}|${NC}"
+echo "${GREEN}|                                            |"
+echo "${GREEN}|${RED} *** ONLY FOR LEGAL, ETHICAL, AUTHORIZED    ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     USE. This author is not responsible    ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     for use of this software, Like a car   ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     manufacturer isn't responsible for     ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     your speeding ticket, this author      ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     isn't responsible for how you use      ${GREEN}|${NC}"
+echo "${GREEN}|${RED}     this.                                  ${GREEN}|${NC}"
+echo "${GREEN}|${RED}                                            ${GREEN}|${NC}"
+echo "${GREEN}----------------------------------------------${NC}"
+
+echo "1. Load Project"
+echo "2. Create Project"
+echo "3. Exit (just press Ctrl+C)"
+read -p "What would you like to do? " STARTINGOPTION
+
+# --- Load an existing project ---
+if [[ $STARTINGOPTION == 1 ]]; then
+    i=0
+    while IFS= read -r line; do
+        i=$((i + 1))
+        echo "$i. $line"
+    done < <(ls ./projects)
+    read -p "Select project: " SELECTION
+    PROJNAME=$(ls ./projects | sed -n "${SELECTION}p")
+    echo "[+] Loading project: $PROJNAME"
+    cd "./projects/$PROJNAME" || { echo "${RED}Could not load project.${NC}"; exit 1; }
+    echo "Directory: $(pwd)"
+fi
+
+# --- Create a new project ---
+if [[ $STARTINGOPTION == 2 ]]; then
+    read -p "Project Name: " PROJNAME
+    mkdir -p "$HOME/projects/$PROJNAME"
+    cd "./projects/$PROJNAME" || { echo "${RED}Could not create project.${NC}"; exit 1; }
+    echo "${GREEN}[+] Project $PROJNAME created.${NC}"
+    read -p "Initial Target IP: " TARGETIP
+    read -p "Initial Target URL: " TARGETURL
+    read -p "Add to /etc/hosts (y/n)? " ADDTOHOSTS
+    if [[ $ADDTOHOSTS == "y" ]]; then
+        echo "$TARGETIP $TARGETURL" | sudo tee -a /etc/hosts >/dev/null
+        echo "[+] Added to /etc/hosts"
+    fi
+    read -p "Type: HTB, BugBounty, or PenTest : " TYPE
+    read -p "Scope: SCOPE
+    read -p "Connect to Obsidian (y/n)? " OBSIDIAN
+    echo "[+] Creating project and target files"
+    if [[ $OBSIDIAN == "y" ]]; then
+        OBSIDIAN_VAULT="${HOME}/ObsidianVault/Pentests"
+        PROJECTS_DIR="/lime/projects"
+        mkdir -p "$OBSIDIAN_VAULT"
+        ln -s "${PROJECTS_DIR}/${PROJNAME}" "${OBSIDIAN_VAULT}/${PROJNAME}"
+        echo "${GREEN}[+] Connected to Obsidian${NC}"
+    fi
+    cat > "$PROJNAME.conf" << EOF
+Projectname="${PROJNAME}"
+Type="${TYPE}"
+TargetIP="{$TARGETIP}"
+TargetURL="{$TARGETURL}"
+Created="$(date '+%Y-%m-%d %H:%M')"
+Scope="{$SCOPE}"
+EOF
+    touch "./methodology.md
+    echo "${GREEN}[+] Created project files${NC}"
+
+    mkdir -p ./targets
+    
+
+    if [[ $TYPE == "BugBounty" ]]; then
+        echo "[+] Additional information needed:"
+        read -p "Bug Bounty Organization: " BBORG
+        read -p "Custom HTML header: " BBHEADER
+        echo "[+] Finalizing project configuration file"
+        cat >> "$PROJNAME.conf" << EOF
+BBOrg="$BBORG"
+BBHeader="$BBHEADER"
+EOF
+    fi
+    echo "${GREEN}Project file created. Now creating first target${NC}"
+    $HOME/lib/createtargetnode.sh "${HOME}/${PROJNAME}"
+    echo "${GREEN}[+] Project and target files created. Now in project ${PROJNAME}.${NC}"
+fi
+
+# --- Main command loop ---
+TARGETNAME=""
+echo "${BLUE}Some helpful commands: exit, list targets, target n, make report, attack.${NC}"
+echo "${BLUE}Once a target is selected, you can choose to enumerate, attack, etc.${NC}"
+
+while true; do
+    if [[ -n "$TARGETNAME" ]]; then
+        read -p "LIMEYUMM:$PROJNAME:$TARGETNAME> " COMMAND
+    else
+        read -p "LIMEYUMM:$PROJNAME> " COMMAND
+    fi
+
+    case "$COMMAND" in
+        exit)
+            echo "${BLUE}Goodbye.${NC}"
+            break
+            ;;
+        "make report")
+            ./makereport "$PROJNAME"
+            ;;
+        "list targets")
+            i=0
+            while IFS= read -r line; do
+                i=$((i + 1))
+                echo "$i. $line"
+            done < <(ls ./targets)
+            ;;
+        target\ *)
+            SELECTION="${COMMAND#target }"
+            TARGETNAME=$(ls ./targets | sed -n "${SELECTION}p")
+            if [[ -z "$TARGETNAME" ]]; then
+                echo "${RED}No target at that number.${NC}"
+            else
+                echo "[+] Target loaded: $TARGETNAME"
+            fi
+            ;;
+        attack)
+            ./modules/attack.sh $TARGET_DIR
+        "")
+            ;;
+        add target node)
+                $HOME/lib/createtargetnode.sh "${HOME}/${PROJNAME}"
+            ;;
+        *)
+            echo "${RED}Unknown command: $COMMAND${NC}"
+            ;;
+    esac
+done
