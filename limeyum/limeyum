@@ -10,11 +10,11 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo "$GREEN----------------------------------------------${NC}"
+echo "${GREEN}----------------------------------------------${NC}"
 echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
 echo "${GREEN}|${YELLOW}             LInux enuMEration              ${GREEN}|${NC}"
 echo "${GREEN}|${YELLOW}             Finding the YUM!               ${GREEN}|${NC}"
-echo "${GREEN}|                                            |"
+echo "${GREEN}|${NC}                                            ${GREEN}|${NC}"
 echo "${GREEN}|${RED} *** ONLY FOR LEGAL, ETHICAL, AUTHORIZED    ${GREEN}|${NC}"
 echo "${GREEN}|${RED}     USE. This author is not responsible    ${GREEN}|${NC}"
 echo "${GREEN}|${RED}     for use of this software, Like a car   ${GREEN}|${NC}"
@@ -63,7 +63,7 @@ if [[ $STARTINGOPTION == 2 ]]; then
     echo "[+] Creating project and target files"
     if [[ $OBSIDIAN == "y" ]]; then
         OBSIDIAN_VAULT="${HOME}/ObsidianVault/Pentests"
-        PROJECTS_DIR="/lime/projects"
+        PROJECTS_DIR="$HOME/lime/projects"
         mkdir -p "$OBSIDIAN_VAULT"
         ln -s "${PROJECTS_DIR}/${PROJNAME}" "${OBSIDIAN_VAULT}/${PROJNAME}"
         echo "${GREEN}[+] Connected to Obsidian${NC}"
@@ -71,16 +71,15 @@ if [[ $STARTINGOPTION == 2 ]]; then
     cat > "$PROJNAME.conf" << EOF
 Projectname="${PROJNAME}"
 Type="${TYPE}"
-TargetIP="{$TARGETIP}"
-TargetURL="{$TARGETURL}"
+TargetIP="${TARGETIP}"
+TargetURL="${TARGETURL}"
 Created="$(date '+%Y-%m-%d %H:%M')"
-Scope="{$SCOPE}"
+Scope="${SCOPE}"
 EOF
-    touch "./methodology.md
+    touch "./methodology.md"
     echo "${GREEN}[+] Created project files${NC}"
 
     mkdir -p ./targets
-    
 
     if [[ $TYPE == "BugBounty" ]]; then
         echo "[+] Additional information needed:"
@@ -93,7 +92,7 @@ BBHeader="$BBHEADER"
 EOF
     fi
     echo "${GREEN}Project file created. Now creating first target${NC}"
-    $HOME/lib/createtargetnode.sh "${HOME}/${PROJNAME}"
+    "$HOME/lib/createtargetnode.sh" "${HOME}/${PROJNAME}"
     echo "${GREEN}[+] Project and target files created. Now in project ${PROJNAME}.${NC}"
 fi
 
@@ -134,11 +133,12 @@ while true; do
             fi
             ;;
         attack)
-            ./modules/attack.sh "$TARGET_DIR"
-        "")
+            "$HOME/lime/modules/attack.sh" "./targets/$TARGETNAME"
             ;;
-        add target node)
-                "$HOME/lib/createtargetnode.sh" "${HOME}/${PROJNAME}"
+        "add target node")
+            "$HOME/lib/createtargetnode.sh" "${HOME}/${PROJNAME}"
+            ;;
+        "")
             ;;
         *)
             echo "${RED}Unknown command: $COMMAND${NC}"
