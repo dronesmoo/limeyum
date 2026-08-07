@@ -40,6 +40,11 @@ chmod +x limeyum
 echo "[+] LIIMEYum file permissions updated"
 
 # Create symlink so `lime` works from anywhere
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+    echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+    source ~/.bashrc
+    echo "${GREEN}[+] Added ~/bin to PATH${NC}"
+fi
 echo "[+] Creating symlink..."
 chmod +x "$THISPATH/limeyum"
 ln -sf "$THISPATH/limeyum" ~/bin/limeyum
