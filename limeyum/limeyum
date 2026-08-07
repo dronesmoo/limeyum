@@ -48,7 +48,7 @@ fi
 if [[ $STARTINGOPTION == 2 ]]; then
     read -p "Project Name: " PROJNAME
     mkdir -p "$home/projects/$PROJNAME"
-    cd "./projects/$PROJNAME" || { echo "${RED}Could not create project.${NC}"; exit 1; }
+    cd "$home/projects/$PROJNAME" || { echo "${RED}Could not create project.${NC}"; exit 1; }
     echo "${GREEN}[+] Project $PROJNAME created.${NC}"
     read -p "Initial Target IP: " TARGETIP
     read -p "Initial Target URL: " TARGETURL
@@ -136,7 +136,7 @@ while true; do
             "$home/lime/modules/attack.sh" "./targets/$TARGETNAME"
             ;;
         "add target node")
-            "$home/lib/createtargetnode.sh" "${HOME}/${PROJNAME}"
+            "$home/lib/createtargetnode.sh" "${home}/${PROJNAME}"
             ;;
         "")
             ;;
