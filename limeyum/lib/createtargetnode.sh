@@ -22,8 +22,8 @@ echo "${GREEN}[+] Creating target configuration"
 touch target.conf
 cat >> "./targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
 Projectname="$PROJNAME"
-TargetIP="$TARGETIP"
-TargetURL="$TARGETURL"
+TARGETIP="$TARGETIP"
+TARGETURL="$TARGETURL"
 Discovered="$(date '+%Y-%m-%d %H:%M')"
 DiscoveredBy="$DISCOVERED"
 
