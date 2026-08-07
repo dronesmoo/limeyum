@@ -39,8 +39,8 @@ echo "[+] LIIMEYum file permissions updated"
 
 # Create symlink so `lime` works from anywhere
 echo "[+] Creating symlink..."
-ln -sf "$THISPATH/limeyum/limeyum" /usr/local/bin/limeyum
-chmod +x "$THISPATH/limeyum/limeyum"
+ln -sf "$THISPATH/limeyum" /usr/local/bin/limeyum
+chmod +x "$THISPATH/limeyum"
 
 # Check for optional dependencies
 echo
