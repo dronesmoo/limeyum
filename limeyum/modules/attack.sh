@@ -7,7 +7,7 @@ if [[ ! -f "$TARGET_DIR/target.conf" ]]; then
     exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$home/modules"
 
 source "$TARGET_DIR/target.conf"   # now $TargetIP, $TargetURL, etc. are set
 ATTACKMODULE=""
