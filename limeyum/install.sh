@@ -14,8 +14,8 @@ echo
 # Validate path exists before proceeding
 read -p "Install path: " THISPATH
 if [[ ! -d "$THISPATH" ]]; then
-    echo "${RED}[-] Path does not exist: $THISPATH${NC}"
-    exit 1
+    chmod -p "${THISPATH}
+    echo "${GREEN}[+] Directory created at ${THISPATH}"
 fi
 
 
@@ -28,7 +28,7 @@ mkdir -p "$THISPATH"/{projects,modules,lib,templates} || {
 
 # Copy files
 echo "[+] Installing files..."
-cp lime.sh "$THISPATH/"
+cp limeyum "$THISPATH/"
 cp -r modules/* "$THISPATH/modules/" 2>/dev/null
 cp -r lib/* "$THISPATH/lib/" 2>/dev/null
 #cp -r templates/* "$THISPATH/templates/" 2>/dev/null
