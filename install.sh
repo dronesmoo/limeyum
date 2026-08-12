@@ -18,27 +18,20 @@ if [[ ! -d "$THISPATH" ]]; then
     exit 1
 fi
 
-# Check if already installed
-if [[ -d "$THISPATH/limeyum" ]]; then
-    echo "${YELLOW}[!] LIMEYum already exists at $THISPATH/limeyum${NC}"
-    read -p "Reinstall? (y/n): " REINSTALL
-    [[ "$REINSTALL" != "y" ]] && exit 0
-    rm -rf "$THISPATH/limeyum"
-fi
 
 # Create structure
 echo "${GREEN}[+] Creating directory structure...${NC}"
-mkdir -p "$THISPATH/limeyum"/{projects,modules,lib,templates} || {
+mkdir -p "$THISPATH"/{projects,modules,lib,templates} || {
     echo "${RED}[-] Failed to create directories. Check permissions.${NC}"
     exit 1
 }
 
 # Copy files
 echo "[+] Installing files..."
-cp lime.sh "$THISPATH/limeyum/"
-cp -r modules/* "$THISPATH/limeyum/modules/" 2>/dev/null
-cp -r lib/* "$THISPATH/limeyum/lib/" 2>/dev/null
-cp -r templates/* "$THISPATH/limeyum/templates/" 2>/dev/null
+cp lime.sh "$THISPATH/"
+cp -r modules/* "$THISPATH/modules/" 2>/dev/null
+cp -r lib/* "$THISPATH/lib/" 2>/dev/null
+#cp -r templates/* "$THISPATH/templates/" 2>/dev/null
 echo "[+] Updating file permissions"
 chmod +x ./modules/*
 chmod +x limeyum

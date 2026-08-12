@@ -13,6 +13,7 @@ PROJECT_DIR="$1"
 echo "${BLUE}Adding new target to project${NC}"
 read -p "Target URL: " TARGETURL
 read -p "Target IP: " TARGETIP
+read -p "Domain controler: " DC
 read -p "How was target discovered: " DISCOVERED
 mkdir -p "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 echo "${GREEN}[+] Creating target directories"
@@ -22,10 +23,13 @@ echo "${GREEN}[+] Creating target configuration"
 touch target.conf
 cat >> "./targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
 Projectname="$PROJNAME"
-TargetIP="$TARGETIP"
-TargetURL="$TARGETURL"
+TARGETIP="$TARGETIP"
+TARGETURL="$TARGETURL"
 Discovered="$(date '+%Y-%m-%d %H:%M')"
 DiscoveredBy="$DISCOVERED"
+TARGETDIR= "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
+PROJECTDIR="${PROJECT_DIR}"
+DOMAINCONTROLLER="${DC}"
 
 #PORTS_START
 #PORTS_END
@@ -38,5 +42,8 @@ DiscoveredBy="$DISCOVERED"
 
 #SESSION_START
 #SESSION_END
+
+#SERVICES_START
+#SERVICES_END
 EOF
 echo "${GREEN}[+] Created target${NC}"
