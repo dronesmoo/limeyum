@@ -93,7 +93,7 @@ BBHeader="$BBHEADER"
 EOF
     fi
     echo "${GREEN}Project file created. Now creating first target${NC}"
-    $home/lib/createtargetnode.sh "${home}/${PROJNAME}"
+    "${SCRIPT_DIR}/lib/createtargetnode.sh" "${SCRIPT_DIR}/projects/${PROJNAME}"
     echo "${GREEN}[+] Project and target files created. Now in project ${PROJNAME}.${NC}"
 fi
 
@@ -138,7 +138,7 @@ while true; do
         "")
             ;;
         add target node)
-                $home/lib/createtargetnode.sh "${home}/${PROJNAME}"
+                ${SCRIPT_DIR}/lib/createtargetnode.sh "${home}/${PROJNAME}"
             ;;
         *)
             echo "${RED}Unknown command: $COMMAND${NC}"
