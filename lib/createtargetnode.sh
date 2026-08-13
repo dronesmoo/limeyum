@@ -18,10 +18,10 @@ read -p "How was target discovered: " DISCOVERED
 mkdir -p "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 echo "${GREEN}[+] Creating target directories"
 cd "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
-mkdir attacks
+mkdir -p attacks
 echo "${GREEN}[+] Creating target configuration"
 touch target.conf
-cat >> "./targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
+cat >> "{PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
 Projectname="$PROJNAME"
 TARGETIP="$TARGETIP"
 TARGETURL="$TARGETURL"
