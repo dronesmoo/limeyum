@@ -15,21 +15,11 @@ read -p "Target URL: " TARGETURL
 read -p "Target IP: " TARGETIP
 read -p "Domain controler: " DC
 read -p "How was target discovered: " DISCOVERED
-mkdir -p "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
-rc=$?
-if [[ $rc -ne 0 ]]; then
-    echo "[!] mkdir failed for ${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP} (exit code $rc)"
-    exit 1
-fi
 echo "${GREEN}[+] Creating target directories"
 TARGET_DIR="${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
+echo -e "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}/attacks"
-rc=$?
-if [[ $rc -ne 0 ]]; then
-    echo "[!] mkdir failed for ${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP} (exit code $rc)"
-    exit 1
-fi
 bash -c "ls ${PROJECT_DIR}/targets"
 echo "${GREEN}[+] Creating target configuration"
 touch "${TARGET_DIR}/target.conf"
