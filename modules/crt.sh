@@ -7,7 +7,7 @@ BLUE=$'\033[38;5;39m'
 NC=$'\033[0m'
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-ATTACKMODULE="ExtEnum"
+ATTACKMODULE="crt"
 
 printf "${BLUE}Let's Enumerate!${NC}\n"
 
@@ -25,8 +25,8 @@ DOMAIN=$(echo "$TARGETURL" | sed -E 's|^https?://||; s|^www\.||; s|/.*$||')
 printf "${GREEN}[+]Target set${NC}\n"
 echo -e "$TIMESTAMP: Enumeration - $target - CRT.SH Scan" >> "/$TARGET_DIR/../methodology.md"
 
-mkdir -p "${TARGET_DIR}/crtsh_${DOMAIN}_${TIMESTAMP}"
-CRTSH_OUT="${TARGET_DIR}/crtsh_${DOMAIN}_${TIMESTAMP}/results.md"
+mkdir -p "${TARGET_DIR}/attacks/crtsh_${DOMAIN}_${TIMESTAMP}"
+CRTSH_OUT="${TARGET_DIR}/attacks/crtsh_${DOMAIN}_${TIMESTAMP}/results.md"
 touch "${CRTSH_OUT}"
 
 printf "${BLUE}[+] Querying crt.sh for ${DOMAIN}...${NC}\n"

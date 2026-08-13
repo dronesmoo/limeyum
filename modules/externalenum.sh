@@ -76,6 +76,10 @@ else
     echo -e "${YELLOW}[!] No new emails found.${NC}"
 fi
 
+read -p "Do you want to do a DNS search (y/n)? DODNS
+if [[ $DODNS == "y" ]]; then
+    bash -c "${SCRIPT_DIR}/dns.sh ${TARGET_DIR}"
+fi
 
 if [[ $GD == "y" ]]; then
     printf "${BLUE}[+] Starting Google Dork${NC}\n"
