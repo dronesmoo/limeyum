@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
-source "${SCRIPT_DIR}/lime.conf"
+source "../${SCRIPT_DIR}/lime.conf"
 
 shopt -s xpg_echo
 RED='\033[0;31m'
