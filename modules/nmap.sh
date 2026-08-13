@@ -151,7 +151,7 @@ wait "${NMAP_PID}"
     grep -oP '<service[^>]*/>' '${outputfile}_scripts.xml | while read -r line; do
     NAME=$(echo "$line" | grep -oP 'name="\K[^"]*')
     VERSION=$(echo "$line" | grep -oP 'version="\K[^"]*')
-    [[ -n "$NAME" ]] && echo "| #${NAME} | #${VERSION} |" >> "${TARGET_DIR}/target.conf
+    [[ -n "$NAME" ]] && echo "| #${NAME} | #${VERSION} |" >> "${TARGET_DIR}/target.conf"
     sed -i "/#SERVICES_END/i ${ENTRY}" "${TARGET_DIR}/target.conf"
 done
 echo -e "${GREEN}"
