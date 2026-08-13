@@ -21,13 +21,13 @@ cd "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 mkdir -p attacks
 echo "${GREEN}[+] Creating target configuration"
 touch target.conf
-cat >> "{PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
+cat >> "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
 Projectname="$PROJNAME"
 TARGETIP="$TARGETIP"
 TARGETURL="$TARGETURL"
 Discovered="$(date '+%Y-%m-%d %H:%M')"
 DiscoveredBy="$DISCOVERED"
-TARGETDIR= "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
+TARGETDIR="${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 PROJECTDIR="${PROJECT_DIR}"
 DOMAINCONTROLLER="${DC}"
 
