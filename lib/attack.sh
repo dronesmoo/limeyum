@@ -38,6 +38,6 @@ echo "Please select your attack:${NC}"
             echo "${RED}Invalid selection.${NC}"
         else
             echo "${BLUE}Starting ${MODULE_NAME%} attack module...${NC}"
-            ""$SCRIPT_DIR"/$MODULE_NAME $TARGET_DIR"
+            ""$ATTACK_DIR"/$MODULE_NAME $TARGET_DIR"
         fi
     fi
