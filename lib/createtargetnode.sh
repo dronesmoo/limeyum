@@ -7,7 +7,7 @@ shopt -s xpg_echo
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+BLUE='\033[38;5;39m'
 NC='\033[0m'
 PROJECT_DIR="$1"
 echo "${BLUE}Adding new target to project${NC}"
@@ -45,5 +45,8 @@ DOMAINCONTROLLER="${DC}"
 
 #SERVICES_START
 #SERVICES_END
+
+#EMAILS_START
+#EMAILS_END
 EOF
-echo "${GREEN}[+] Created target${NC}"
+echo "${GREEN}[+] Created target${NC}"x

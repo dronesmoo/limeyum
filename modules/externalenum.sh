@@ -3,7 +3,7 @@
 RED=$'\033[0;31m'
 YELLOW=$'\033[1;33m'
 GREEN=$'\033[0;32m'
-BLUE=$'\033[0;34m'
+BLUE=$'\033[38;5;39m'
 NC=$'\033[0m'
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -48,6 +48,32 @@ printf "${GREEN}=== PASSWORD SCAN COMPLETE ===\nEmails found:\n"
 cat "${THISDIR}/emails.txt"
 printf "Potential Passord Fields Found:\n"
 cat "${THISDIR}/passwordfields.txt"
+if [[ -s "${THISDIR}/emails.txt" ]]; then
+    echo -e "${GREEN}[+] Updating emails in target.conf...${NC}"
+
+    {
+        # Keep existing entries (between markers, excluding the markers themselves)
+        if grep -q "#EMAILS_START" "$TARGET_DIR/target.conf"; then
+            sed -n '/#EMAILS_START/,/#EMAILS_END/{//!p}' "$TARGET_DIR/target.conf"
+        fi
+        # Add new findings
+        cat "${THISDIR}/emails.txt"
+    } | sort -u > "${THISDIR}/new_emails_block.txt"
+
+    # Remove old block
+    sed -i '/#EMAILS_START/,/#EMAILS_END/d' "$TARGET_DIR/target.conf"
+
+    # Write fresh block back
+    {
+        echo "#EMAILS_START"
+        cat "${THISDIR}/new_emails_block.txt"
+        echo "#EMAILS_END"
+    } >> "$TARGET_DIR/target.conf"
+
+    echo -e "${GREEN}[+] Emails updated in target.conf${NC}"
+else
+    echo -e "${YELLOW}[!] No new emails found.${NC}"
+fi
 
 
 if [[ $GD == "y" ]]; then
