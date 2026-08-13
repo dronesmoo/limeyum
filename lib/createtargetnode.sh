@@ -20,7 +20,7 @@ echo "${GREEN}[+] Creating target directories"
 TARGET_DIR="${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 mkdir -p "${TARGET_DIR}/attacks"
 echo "${GREEN}[+] Creating target configuration"
-touch "${TARGET_DIR"/target.conf"
+touch "${TARGET_DIR}"/target.conf"
 cat >> "${TARGET_DIR}/target.conf" << EOF
 Projectname="$PROJNAME"
 TARGETIP="$TARGETIP"
