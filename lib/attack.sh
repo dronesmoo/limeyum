@@ -10,7 +10,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$TARGET_DIR/target.conf"   
 ATTACKMODULE=""
-ATTACK_DIR="../${SCRIPT_DIR}"
+ATTACK_DIR="$(cd "$SCRIPT_DIR/../modules" && pwd)"
 
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
