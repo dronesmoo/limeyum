@@ -138,7 +138,7 @@ while true; do
             ${SCRIPT_DIR}/lib/attack.sh $TARGET_DIR
             ;;
         "add target node")
-                ${SCRIPT_DIR}/lib/createtargetnode.sh "${home}/${PROJNAME}"
+                ${SCRIPT_DIR}/lib/createtargetnode.sh "${SCRIPT_DIR}/projects/${PROJNAME}"
             ;;
         *)
             echo "${RED}Unknown command: $COMMAND${NC}"
