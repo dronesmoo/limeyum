@@ -80,8 +80,8 @@ echo -e "1. Speed: 1. Invisible  2. Ninja  3. Standard  4. Fast"
            port_flags="-p ${custom_ports}" ;;
         *) port_flags="-p-" ;;
     esac
-    read -p "Use default header ${HEADER} (y/n)? " UDHEADER
-    if [[  UDHEADER == "y" ]]; then
+    read -p "Use default header: ${HEADER} (y/n)? " UDHEADER
+    if [[  $UDHEADER == "y" ]]; then
         THISHEADER="--script http-title --script-args http.useragent=\"${HEADER}\""
     else
         read -p "Enter custom header: " CUSTHEADER
