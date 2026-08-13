@@ -131,6 +131,7 @@ while true; do
                 echo "${RED}No target at that number.${NC}"
             else
                 echo "[+] Target loaded: $TARGETNAME"
+                TARGET_DIR="${SCRIPT_DIR}/${PROJNAME}/${TARGETNAME}"
             fi
             ;;
         attack)
