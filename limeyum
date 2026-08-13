@@ -76,7 +76,7 @@ TargetURL="{$TARGETURL}"
 Created="$(date '+%Y-%m-%d %H:%M')"
 Scope="{$SCOPE}"
 EOF
-    touch "./methodology.md
+    touch "./methodology.md"
     echo "${GREEN}[+] Created project files${NC}"
 
     mkdir -p ./targets
