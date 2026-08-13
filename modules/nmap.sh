@@ -52,7 +52,7 @@ elif [[ -n "$TARGETURL" ]]; then
 fi
 
 echo -e "${GREEN}[+] Target: $target${NC}" 
-echo -e "$TIMESTAMP: Enumeration - $target - NMAP" >> "../$TARGET_DIR/methodology.md"
+echo -e "$TIMESTAMP: Enumeration - $target - NMAP" >> "${TARGET_DIR}/../methodology.md"
 echo -e "1. Speed: 1. Invisible  2. Ninja  3. Standard  4. Fast"
     read -e -p "   Select speed [1-4]: " speed_choice
     case "$speed_choice" in
