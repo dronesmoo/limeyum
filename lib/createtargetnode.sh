@@ -17,11 +17,11 @@ read -p "Domain controler: " DC
 read -p "How was target discovered: " DISCOVERED
 mkdir -p "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
 echo "${GREEN}[+] Creating target directories"
-cd "${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
-mkdir attacks
+TARGET_DIR="${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
+mkdir -p "${TARGET_DIR}/attacks"
 echo "${GREEN}[+] Creating target configuration"
-touch target.conf
-cat >> "./targets/${TARGETURL}_${TARGETIP}/target.conf" << EOF
+touch "${TARGET_DIR"/target.conf"
+cat >> "${TARGET_DIR}/target.conf" << EOF
 Projectname="$PROJNAME"
 TARGETIP="$TARGETIP"
 TARGETURL="$TARGETURL"
@@ -49,4 +49,4 @@ DOMAINCONTROLLER="${DC}"
 #EMAILS_START
 #EMAILS_END
 EOF
-echo "${GREEN}[+] Created target${NC}"x
+echo "${GREEN}[+] Created target${NC}"
