@@ -38,6 +38,6 @@ echo "Please select your attack:${NC}"
             echo -e "${RED}Invalid selection.${NC}"
         else
             echo -e "${BLUE}Starting ${MODULE_NAME%} attack module...${NC}"
-            "${ATTACK_DIR}/${MODULE_NAME} ${TARGET_DIR}"
+            bash -c "${ATTACK_DIR}/${MODULE_NAME} ${TARGET_DIR}"
         fi
     fi
