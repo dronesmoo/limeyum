@@ -27,7 +27,7 @@ echo "Please select your attack:${NC}"
         i=$((i + 1))
         options+=("$line")
         echo "$i. ${line%.sh}"
-    done < <(ls "$SCRIPT_DIR" | grep '\.sh$' | grep -vE '^(attack|report)\.sh$')
+    done < <(ls "../$SCRIPT_DIR" | grep '\.sh$' | grep -vE '^(attack|report)\.sh$')
 
     if [[ $i -eq 0 ]]; then
         echo "${RED}No attack modules found in ./modules${NC}"
