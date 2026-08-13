@@ -23,6 +23,7 @@ if [[ $rc -ne 0 ]]; then
 fi
 echo "${GREEN}[+] Creating target directories"
 TARGET_DIR="${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP}"
+mkdir -p "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}/attacks"
 rc=$?
 if [[ $rc -ne 0 ]]; then
