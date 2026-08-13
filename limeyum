@@ -137,7 +137,7 @@ while true; do
             ./modules/attack.sh $TARGET_DIR
         "")
             ;;
-        add target node)
+        "add target node")
                 ${SCRIPT_DIR}/lib/createtargetnode.sh "${home}/${PROJNAME}"
             ;;
         *)
