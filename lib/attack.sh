@@ -29,15 +29,15 @@ echo "Please select your attack:${NC}"
     done < <(ls "${ATTACK_DIR}" | grep '\.sh$' | grep -vE '^(attack|report)\.sh$')
 
     if [[ $i -eq 0 ]]; then
-        echo "${RED}No attack modules found in ./modules${NC}"
+        echo -e "${RED}No attack modules found in ./modules${NC}"
     else
         read -p "Attack module: " ATTACKMODULE
         MODULE_NAME="${options[$((ATTACKMODULE - 1))]}"
 
         if [[ -z "$MODULE_NAME" ]]; then
-            echo "${RED}Invalid selection.${NC}"
+            echo -e "${RED}Invalid selection.${NC}"
         else
-            echo "${BLUE}Starting ${MODULE_NAME%} attack module...${NC}"
-            ""$ATTACK_DIR"/$MODULE_NAME $TARGET_DIR"
+            echo -e "${BLUE}Starting ${MODULE_NAME%} attack module...${NC}"
+            "${ATTACK_DIR}/${MODULE_NAME} ${TARGET_DIR}"
         fi
     fi
