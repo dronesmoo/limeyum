@@ -47,7 +47,7 @@ fi
 # --- Create a new project ---
 if [[ $STARTINGOPTION == 2 ]]; then
     read -p "Project Name: " PROJNAME
-    mkdir -p "$HOME/projects/$PROJNAME"
+    mkdir -p "$home/projects/$PROJNAME"
     cd "./projects/$PROJNAME" || { echo "${RED}Could not create project.${NC}"; exit 1; }
     echo "${GREEN}[+] Project $PROJNAME created.${NC}"
     read -p "Initial Target IP: " TARGETIP
@@ -62,7 +62,7 @@ if [[ $STARTINGOPTION == 2 ]]; then
     read -p "Connect to Obsidian (y/n)? " OBSIDIAN
     echo "[+] Creating project and target files"
     if [[ $OBSIDIAN == "y" ]]; then
-        OBSIDIAN_VAULT="${HOME}/ObsidianVault/Pentests"
+        OBSIDIAN_VAULT="${home}/ObsidianVault/Pentests"
         PROJECTS_DIR="/lime/projects"
         mkdir -p "$OBSIDIAN_VAULT"
         ln -s "${PROJECTS_DIR}/${PROJNAME}" "${OBSIDIAN_VAULT}/${PROJNAME}"
@@ -93,7 +93,7 @@ BBHeader="$BBHEADER"
 EOF
     fi
     echo "${GREEN}Project file created. Now creating first target${NC}"
-    $HOME/lib/createtargetnode.sh "${HOME}/${PROJNAME}"
+    $home/lib/createtargetnode.sh "${home}/${PROJNAME}"
     echo "${GREEN}[+] Project and target files created. Now in project ${PROJNAME}.${NC}"
 fi
 
@@ -138,7 +138,7 @@ while true; do
         "")
             ;;
         add target node)
-                $HOME/lib/createtargetnode.sh "${HOME}/${PROJNAME}"
+                $home/lib/createtargetnode.sh "${home}/${PROJNAME}"
             ;;
         *)
             echo "${RED}Unknown command: $COMMAND${NC}"
