@@ -56,11 +56,11 @@ echo -e "$TIMESTAMP: Enumeration - $target - NMAP" >> "../$TARGET_DIR/methodolog
 echo -e "1. Speed: 1. Invisible  2. Ninja  3. Standard  4. Fast"
     read -e -p "   Select speed [1-4]: " speed_choice
     case "$speed_choice" in
-        1) speed_flags="-T0 -sS -Pn" ;;          # invisible: slow, stealthy
+        1) speed_flags="-T0 -sS" ;;          # invisible: slow, stealthy
        #)ces (y/n)? " CHECKEXPLOITS
 #<can of ${target} (${port_flags}),1-5 with flags: ${speed_flags}${NC}"
 #<peed
-        2) speed_flags="-T1 -sS -Pn" ;;           # ninja: quieter
+        2) speed_flags="-T1 -sS" ;;           # ninja: quieter
         3) speed_flags="-T3 -sS" ;;               # standard
         4) speed_flags="-T4 -sS" ;;               # fast
         *) speed_flags="-T3 -sS" ;;
@@ -80,13 +80,20 @@ echo -e "1. Speed: 1. Invisible  2. Ninja  3. Standard  4. Fast"
            port_flags="-p ${custom_ports}" ;;
         *) port_flags="-p-" ;;
     esac
+    read -p "Use default header ${HEADER} (y/n)? " UDHEADER
+    if [[  UDHEADER == "y" ]]; then
+        THISHEADER="--script http-title --script-args http.useragent=\"${HEADER}\""
+    else
+        read -p "Enter custom header: " CUSTHEADER
+        THISHEADER="--script http-title --script-args http.useragent=\"${CUSTHEADER}\""
+    fi
     outdir="${TARGET_DIR}/attacks/NMAP-${TIMESTAMP}"
     mkdir "${outdir}"
     outfile="${outdir}/NMAP-${TIMESTAMP}_initial"
 
     echo
     echo -e "${BLUE} [+] Starting NMAP scan of ${target} (${port_flags}) with flags: ${speed_flags} -Pn"
-    bash -c "nmap  -Pn  ${speed_flags} ${port_flags} -oA ${outfile} ${target}" >/dev/null  2>&1 &
+    bash -c "nmap  -Pn  ${speed_flags} ${port_flags} -oA ${outfile} ${target} ${THISHEADER}" >/dev/null  2>&1 &
     NMAP_PID=$!
     spin() {
     local SPINNER=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
@@ -119,7 +126,7 @@ echo -e "${GREEN}[+] Target Config updated${NC}"
     case "$post_choice" in
         1) read -p "Check for exploits on found services y/n? " CHECKEXPLOITS
         echo -e "${BLUE}[+] Starting NMAP Script scan of ${target} (${port_flags}),1-5 with flags: ${speed_flags}${NC}"
-        bash -c "nmap -sV -sC -O ${port_flags} ${speed_flags} -p 1-5 -oA ${outfile}_scripts $target"  >/dev/null  2>&1 &
+        bash -c "nmap -sV -sC -O ${port_flags} ${speed_flags} -p 1-5 -oA ${outfile}_scripts ${target} ${THISHEADER}"  >/dev/null  2>&1 &
          NMAP_PID=$!
     spin() {
     local SPINNER=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
