@@ -29,7 +29,7 @@ if [[ $rc -ne 0 ]]; then
     echo "[!] mkdir failed for ${PROJECT_DIR}/targets/${TARGETURL}_${TARGETIP} (exit code $rc)"
     exit 1
 fi
-bash -c "ls ${PROJECT_DIR}"
+bash -c "ls ${PROJECT_DIR}/targets"
 echo "${GREEN}[+] Creating target configuration"
 touch "${TARGET_DIR}/target.conf"
 rc=$?
@@ -37,7 +37,7 @@ if [[ $rc -ne 0 ]]; then
     echo "[!] touch failed for target.conf (exit code $rc)"
     exit 1
 fi
-bash -c "ls ${TARGET_URL}"
+bash -c "ls ${TARGET_DIR}"
 cat >> "${TARGET_DIR}/target.conf" << EOF
 Projectname="$PROJNAME"
 TARGETIP="$TARGETIP"
