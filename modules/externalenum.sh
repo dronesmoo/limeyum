@@ -28,6 +28,7 @@ echo -e "$TIMESTAMP: Enumeration - $target - External Enumeration" >> "../$TARGE
 echo "This will mirror the site and search files for login fields, contact forms, emails, and passwords."
 read -p "Continue (y/n)? " CONTINUE
 read -p "Do you want to Google-Dork (y/n)? " GD
+read -p "Do you want to check CRT.SH (y/n)? " DOCRT
 if [[ $CONTINUE != "y" ]]; then
 exit 1
 fi
@@ -79,4 +80,9 @@ fi
 if [[ $GD == "y" ]]; then
     printf "${BLUE}[+] Starting Google Dork${NC}\n"
     bash -c "${SCRIPT_DIR}/google-dork.sh ${TARGET_DIR}"
+fi
+
+if [[ $DOCRT == "y" ]]; then
+    printf "${BLUE}[+] Starting CRT.SH Lookup{NC}\n"
+    bash -c "${SCRIPT_DIR}/crt.sh ${TARGET_DIR}"
 fi
