@@ -1,4 +1,4 @@
-# modules/attack.sh
+# lib/attack.sh
 #!/bin/bash
 
 TARGET_DIR="$1"
@@ -8,10 +8,9 @@ if [[ ! -f "$TARGET_DIR/target.conf" ]]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-source "$TARGET_DIR/target.conf"   # now $TargetIP, $TargetURL, etc. are set
+source "$TARGET_DIR/target.conf"   
 ATTACKMODULE=""
-
+ATTACK_DIR="../${SCRIPT_DIR}"
 
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
@@ -27,7 +26,7 @@ echo "Please select your attack:${NC}"
         i=$((i + 1))
         options+=("$line")
         echo "$i. ${line%.sh}"
-    done < <(ls "../$SCRIPT_DIR" | grep '\.sh$' | grep -vE '^(attack|report)\.sh$')
+    done < <(ls "${ATTACK_DIR}" | grep '\.sh$' | grep -vE '^(attack|report)\.sh$')
 
     if [[ $i -eq 0 ]]; then
         echo "${RED}No attack modules found in ./modules${NC}"
